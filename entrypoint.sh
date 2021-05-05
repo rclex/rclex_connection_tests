@@ -9,7 +9,7 @@ cd $testRoot
 
 for dir in $dirs;
 do
-    if test $dir = '.' -o $dir = './rclcpp' -o $dir = './rclex' -o $dir = './git'; then
+    if test $dir = '.' -o $dir = './rclcpp' -o $dir = './rclex' -o $dir = './.git'; then
         continue
     fi
     echo $dir
@@ -18,6 +18,7 @@ do
         if test $testScript = '*.sh'; then
             continue
         fi
+        echo "run $dir/$testScript"
         ./$testScript $projectRoot
         result=`echo $?`
         if test $result -ne 0; then
