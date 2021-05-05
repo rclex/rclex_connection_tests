@@ -19,8 +19,8 @@ exPub=`cat ex_pub.txt`
 cppSub=`cat $root/rclex_connection_tests/cpp_sub.txt`
 test $cppSub = $exPub
 result=$?
-echo "published message : $cppSub"
-echo "subscribed message : $exPub"
+echo "published message : $exPub"
+echo "subscribed message : $cppSub"
 echo "result : $result"
 rm ex_pub.txt
 rm $root/rclex_connection_tests/cpp_sub.txt
