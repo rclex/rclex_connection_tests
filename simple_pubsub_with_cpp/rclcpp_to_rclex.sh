@@ -21,6 +21,8 @@ result=$?
 echo "published message : $cppPub"
 echo "subscribed message : $exSub"
 echo "result : $result"
+rm cpp_pub.txt
+rm $root/ex_sub.txt
 if [ $result -ne 0 ]; then
     echo "Error: simple_pub_sub"
     exit 1
