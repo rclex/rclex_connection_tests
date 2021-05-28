@@ -3,10 +3,8 @@ services:
 
     rclex_docker:
         build: .
-        image: rclex_docker
+        image: rclex/rclex_docker:latest
         volumes:
-            - ../rclex:/rclex
-            - ./rclex/lib/test:/rclex/lib/test
-            - .:/rclex/rclex_connection_tests
+            - ../rclex:/root/rclex
+            - .:/root/rclex_connection_tests/
         tty: true
-
