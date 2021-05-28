@@ -3,6 +3,10 @@ defmodule Test.App.SimplePubSub do
     The sample which makes any number of publishers.
   """
   def pub_main(num_node) do
+    # Create data to be published
+    data = Test.Helper.String.random_string(10)
+    File.write("ex_pub.txt", data)
+
     context = Rclex.rclexinit
     node_list = Rclex.create_nodes(context,'test_pub_node',num_node)
     publisher_list = Rclex.create_publishers(node_list, 'testtopic', :single)
@@ -10,7 +14,7 @@ defmodule Test.App.SimplePubSub do
 
     # In timer_start/2,3, the number of times that the timer process is executed can be set.
     # If it is not set, the timer process loops forever.
-    
+
     Process.sleep(3000)
     Rclex.Timer.terminate_timer(sv, child)
     Rclex.publisher_finish(publisher_list, node_list)
@@ -25,9 +29,8 @@ defmodule Test.App.SimplePubSub do
     # Create messages according to the number of publishers.
     n = length(publisher_list)
     msg_list = Rclex.initialize_msgs(n, :string)
-    data = Test.Helper.String.random_string(10)
+    {:ok, data} = File.read("ex_pub.txt")
     IO.puts("publish message:#{data}")
-    File.write("ex_pub.txt", data)
     # Set data.
     Enum.map(0..(n - 1), fn index ->
       Rclex.setdata(Enum.at(msg_list, index), data, :string)
@@ -41,7 +44,7 @@ defmodule Test.App.SimplePubSub do
   def sub_main(num_node) do
     # Create as many nodes as you specify in num_node
     context = Rclex.rclexinit
-    node_list = Rclex.create_nodes(context,'test_sub_node',num_node) 
+    node_list = Rclex.create_nodes(context,'test_sub_node',num_node)
     subscriber_list = Rclex.create_subscribers(node_list, 'testtopic', :single)
     {sv, child} = Rclex.Subscriber.subscribe_start(subscriber_list, context, &sub_callback/1)
 
