@@ -9,18 +9,18 @@ mix run priv/pub_test.exs &
 wait
 
 exPub=`cat ex_pub.txt`
-echo "published message : $exPub"
+echo "TESTINFO: published message  : $exPub"
 rm ex_pub.txt
 
 exSub=`cat ex_sub.txt`
-echo "subscribed message : $exSub"
+echo "TESTINFO: subscribed message : $exSub"
 rm ex_sub.txt
 
 test $exPub = $exSub
 result=$?
-echo "result : $result"
+echo "TESTINFO: result : $result"
 
 if [ $result -ne 0 ]; then
-    echo "Error: simple_pub_sub"
+    echo "TESTERROR: $0 failed."
     exit 1
-fi 
+fi

@@ -50,19 +50,22 @@ do
     testCount=$(($testCount + 1))
     echo "INFO: running test scrpit: $testScript"
     ./$testScript $rclexRoot
-    result=`echo $?`
+    result=$?
     if test $result -eq 0; then
-        echo -e "$testScript passed!\n"
+        echo -e "INFO: $testScript passed!\n"
         passedTestCount=$(($passedTestCount + 1))
     else
-        echo -e "$testScript failed!\n"
+        echo -e "WARN: $testScript failed!\n"
         failedTestNames+="  $testScript\n"
     fi
 done
 
-echo "Complete All Tests"
-echo "Passed Tests: $passedTestCount / $testCount"
+echo "INFO: Complete all tests"
+echo "INFO: number of passed tests: $passedTestCount / $testCount"
 if test $testCount -ne $passedTestCount; then
-    echo -e "Failed Tests: \n$failedTestNames"
-    exit 1
+    echo -e "ERROR: Failed tests: \n$failedTestNames"
+    exit $testCount
+else
+    echo "INFO: All Tests passed."
+    exit 0
 fi
