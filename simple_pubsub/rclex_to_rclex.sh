@@ -1,23 +1,26 @@
 #!/bin/bash
 
+cd $1
 
-root=$1
-cd $root
-mix compile
-mix run rclex_connection_tests/rclex/sub_test.exs &
+mix run priv/sub_test.exs &
 sleep 1
-mix run rclex_connection_tests/rclex/pub_test.exs &
+
+mix run priv/pub_test.exs &
 wait
+
 exPub=`cat ex_pub.txt`
+echo "TESTINFO: published message  : $exPub"
+rm ex_pub.txt
+
 exSub=`cat ex_sub.txt`
+echo "TESTINFO: subscribed message : $exSub"
+rm ex_sub.txt
+
 test $exPub = $exSub
 result=$?
-echo "published message : $exPub"
-echo "subscribed message : $exSub"
-echo "result : $result"
-rm ex_pub.txt
-rm ex_sub.txt
+echo "TESTINFO: result : $result"
+
 if [ $result -ne 0 ]; then
-    echo "Error: simple_pub_sub"
+    echo "TESTERROR: $0 failed."
     exit 1
-fi 
+fi

@@ -1,30 +1,26 @@
 #!/bin/bash
 
-testDir=`pwd`
-root=$1
-cd ../rclcpp
-colcon build
-source install/setup.bash
-echo $testDir
-cd $testDir
-cd ../
+cd $1
+
 ros2 run cpp_pubsub listener &
 sleep 1
-echo $root
-cd $root
-mix compile
-mix run rclex_connection_tests/rclex/pub_test.exs &
+
+mix run priv/pub_test.exs &
 wait
+
 exPub=`cat ex_pub.txt`
-cppSub=`cat $root/rclex_connection_tests/cpp_sub.txt`
+echo "TESTINFO: published message  : $exPub"
+rm ex_pub.txt
+
+cppSub=`cat cpp_sub.txt`
+echo "TESTINFO: subscribed message : $cppSub"
+rm cpp_sub.txt
+
 test $cppSub = $exPub
 result=$?
-echo "published message : $exPub"
-echo "subscribed message : $cppSub"
-echo "result : $result"
-rm ex_pub.txt
-rm $root/rclex_connection_tests/cpp_sub.txt
+echo "TESTINFO: result : $result"
+
 if [ $result -ne 0 ]; then
-    echo "Error: simple_pub_sub"
+    echo "TESTERROR: $0 failed."
     exit 1
-fi 
+fi
