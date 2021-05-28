@@ -1,6 +1,10 @@
 #!/bin/bash
 
-testDirs=(simple_pubsub)
+testScripts=()
+testScripts+=(simple_pubsub/rclcpp_to_rclex.sh)
+testScripts+=(simple_pubsub/rclex_to_rclcpp.sh)
+testScripts+=(simple_pubsub/rclex_to_rclex.sh)
+
 testRoot=`pwd`
 rclcppRoot=${testRoot}/rclcpp_node
 rclexRoot=${testRoot}/rclex_node
@@ -37,26 +41,23 @@ failedTestNames=""
 testCount=0
 passedTestCount=0
 
-for dir in $testDirs;
+for testScript in ${testScripts[@]};
 do
-    echo -e "INFO: entering testDir: $dir"
-    cd $testRoot/$dir
-    for testScript in *.sh; do
-        if test $testScript = '*.sh'; then
-            continue
-        fi
-        testCount=$(($testCount + 1))
-        echo "INFO: running test scrpit: $dir/$testScript"
-        ./$testScript $rclexRoot
-        result=`echo $?`
-        if test $result -eq 0; then
-            echo -e "$testScript passed!\n"
-            passedTestCount=$(($passedTestCount + 1))
-        else
-            echo -e "$testScript failed!\n"
-            failedTestNames+="  $testScript\n"
-        fi
-    done
+    cd $testRoot
+    if test $testScript = '*.sh'; then
+        continue
+    fi
+    testCount=$(($testCount + 1))
+    echo "INFO: running test scrpit: $testScript"
+    ./$testScript $rclexRoot
+    result=`echo $?`
+    if test $result -eq 0; then
+        echo -e "$testScript passed!\n"
+        passedTestCount=$(($passedTestCount + 1))
+    else
+        echo -e "$testScript failed!\n"
+        failedTestNames+="  $testScript\n"
+    fi
 done
 
 echo "Complete All Tests"
