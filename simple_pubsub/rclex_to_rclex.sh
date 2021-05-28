@@ -4,9 +4,9 @@
 root=$1
 cd $root
 mix compile
-mix run rclex_connection_tests/rclex/sub_test.exs &
+mix run priv/sub_test.exs &
 sleep 1
-mix run rclex_connection_tests/rclex/pub_test.exs &
+mix run priv/pub_test.exs &
 wait
 exPub=`cat ex_pub.txt`
 exSub=`cat ex_sub.txt`

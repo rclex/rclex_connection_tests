@@ -2,13 +2,14 @@
 
 testDir=`pwd`
 root=$1
-cd ../rclcpp
+cd ../rclcpp_node
 colcon build
 source install/setup.bash
 cd $root
 echo $root
+mix deps.get
 mix compile
-mix run rclex_connection_tests/rclex/sub_test.exs &
+mix run priv/sub_test.exs &
 sleep 1
 cd $testDir
 cd ../

@@ -1,21 +1,18 @@
 #!/bin/bash
 
-dirs=`find . -maxdepth 1 -type d `
+testDirs=(simple_pubsub)
 testRoot=`pwd`
-cd ../
-projectRoot=`pwd`
+projectRoot="`pwd`/.."
+#rclexRoot=${projectRoot}/rclex
+rclexRoot=${testRoot}/rclex_node
+
 failedTestNames=""
 testCount=0
 passedTestCount=0
 
-cd $testRoot
-
-for dir in $dirs;
+for dir in $testDirs;
 do
-    if test $dir = '.' -o $dir = './rclcpp' -o $dir = './rclex' -o $dir = './.git'; then
-        continue
-    fi
-    echo $dir
+    echo -e "entering testDir: $dir"
     cd $dir
     for testScript in *.sh; do
         if test $testScript = '*.sh'; then
@@ -23,7 +20,7 @@ do
         fi
         testCount=$(($testCount + 1))
         echo "run $dir/$testScript"
-        ./$testScript $projectRoot
+        ./$testScript $rclexRoot
         result=`echo $?`
         if test $result -eq 0; then
             echo -e "$testScript passed!\n"
