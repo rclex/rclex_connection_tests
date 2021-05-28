@@ -6,7 +6,7 @@ Rclex自体の開発途中のテストやGitHub ActionsによるCIで使われ�
 以下のように、2つのリポジトリのディレクトリを配置してください。
 
 ```
-$ cd /pato/to/yours
+$ cd /path/to/yours
 $ git clone https://github.com/rclex/rclex
 $ git clone https://github.com/rclex/rclex_connection_tests
 $ ls
