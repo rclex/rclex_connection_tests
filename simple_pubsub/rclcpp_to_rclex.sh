@@ -10,11 +10,11 @@ wait
 
 sleep 1
 
-cppPub=`cat cpp_pub.txt`
+cppPub=`cat cpp_pub.txt | tr -d "\0"`
 echo "TESTINFO: published message  : $cppPub"
 rm -f cpp_pub.txt
 
-exSub=`cat ex_sub.txt`
+exSub=`cat ex_sub.txt | tr -d "\0"`
 echo "TESTINFO: subscribed message : $exSub"
 rm -f ex_sub.txt
 

@@ -10,11 +10,11 @@ wait
 
 sleep 1
 
-exPub=`cat ex_pub.txt`
+exPub=`cat ex_pub.txt | tr -d "\0"`
 echo "TESTINFO: published message  : $exPub"
 rm -f ex_pub.txt
 
-exSub=`cat ex_sub.txt`
+exSub=`cat ex_sub.txt | tr -d "\0"`
 echo "TESTINFO: subscribed message : $exSub"
 rm -f ex_sub.txt
 
