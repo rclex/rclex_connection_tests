@@ -8,6 +8,8 @@ sleep 1
 mix run priv/pub_test.exs &
 wait
 
+sleep 1
+
 exPub=`cat ex_pub.txt`
 echo "TESTINFO: published message  : $exPub"
 rm -f ex_pub.txt
