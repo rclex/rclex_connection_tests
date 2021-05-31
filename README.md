@@ -17,14 +17,16 @@ rclex  rclex_connection_tests
 
 ## ネイティブ環境での使い方 
 
-ROS 2およびElixir/Erlangの導入済みの環境では、`entrypoint.sh`を実行してください。
+ROS 2およびElixir/Erlangの導入済みの環境では、`run-all.sh`を実行してください。
 
 ```
 $ cd /path/to/yours/rclex_connection_tests
 $ ./run-all.sh
 ```
 
-`./run-rebuild.sh` はRclcppおよびRclexノードのビルドのみを実行します。
+`./run-rebuild.sh`は通信テスト用ノードのクリーンビルドのみを実行します。`rclcpp` または `rclex` のオプションでそれぞれ個別のビルドを指定することもできます。
+
+`./run-test.sh`は通信テストのみを実行します。任意個数の引数で対象とするテストスクリプトを指定することもできます。
 
 ## Dockerを使用する場合
 

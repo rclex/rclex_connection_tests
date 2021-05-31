@@ -6,6 +6,22 @@ testScripts+=(simple_pubsub/rclcpp_to_rclex.sh)
 testScripts+=(simple_pubsub/rclex_to_rclcpp.sh)
 testScripts+=(simple_pubsub/rclex_to_rclex.sh)
 
+if [ $# -ne 0 ];
+then
+    testScripts=()
+    for arg in ${@};
+    do
+        echo "INFO: addint ${arg} as test script"
+        if [ -e ${arg} ];
+        then
+            testScripts+=(${arg})
+        else
+            echo "ERROR: test script ${arg} does not exists"
+            exit 1
+        fi
+    done
+fi
+
 
 testRoot=`pwd`
 rclcppRoot=${testRoot}/rclcpp_node
