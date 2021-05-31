@@ -2,7 +2,7 @@
 
 ROS2クライアントライブラリ[Rclex](https://github.com/rclex/rclex)のテストディレクトリです。  
 
-Rclex自体の開発途中のテストやGitHub ActionsによるCIで使われることを想定しているため、rclexのリポジトリがローカルにあり、本リポジトリと並列にディレクトリが配置されている必要があります。
+Rclex自体の開発途中のテストやGitHub ActionsによるCIで使われることを想定しているため、Rclexのリポジトリがローカルにあり、本リポジトリと並列にディレクトリが配置されている必要があります。
 以下のように、2つのリポジトリのディレクトリを配置してください。
 
 ```
@@ -24,7 +24,7 @@ $ cd /path/to/yours/rclex_connection_tests
 $ ./entrypoint.sh
 ```
 
-## dockerを使用する場合
+## Dockerを使用する場合
 
 Dockerが使用できる環境では、[Docker Hub](https://hub.docker.com/r/rclex/rclex_docker)で公開しているimageを使用して、次のように実行することもできます。
 
