@@ -21,8 +21,10 @@ ROS 2およびElixir/Erlangの導入済みの環境では、`entrypoint.sh`を�
 
 ```
 $ cd /path/to/yours/rclex_connection_tests
-$ ./entrypoint.sh
+$ ./run-all.sh
 ```
+
+`./run-rebuild.sh` はRclcppおよびRclexノードのビルドのみを実行します。
 
 ## Dockerを使用する場合
 

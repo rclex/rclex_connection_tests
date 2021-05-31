@@ -1,49 +1,29 @@
 #!/bin/bash
 
+# define testScripts (need to edit when test case was added)
 testScripts=()
 testScripts+=(simple_pubsub/rclcpp_to_rclex.sh)
 testScripts+=(simple_pubsub/rclex_to_rclcpp.sh)
 testScripts+=(simple_pubsub/rclex_to_rclex.sh)
 
+
 testRoot=`pwd`
 rclcppRoot=${testRoot}/rclcpp_node
 rclexRoot=${testRoot}/rclex_node
 
-# Rebuild Rclcpp node
-cd $rclcppRoot
-if [ "$(uname)" == 'Darwin' ];
+if [ ! -d ${rclcppRoot}/build ];
 then
-    rm -rf build install log
+    echo "ERROR: ${rclcppRoot} has not been built"
+    echo "ERROR: please do ./run-rebuild.sh before this"
+    exit 1
 else
-    sudo rm -rf build install log
+    source ${rclcppRoot}/install/setup.bash
 fi
-colcon build
-result=$?
-if [ $result -ne 0 ]; then
-    echo "ERROR: \`colcon build\` for Rclcpp failed: $result"
-    exit $result
-else
-    source install/setup.bash
-fi
-
-# Rebuild Rclex node
-cd $rclexRoot
-if [ "$(uname)" == 'Darwin' ];
+if [ ! -d ${rclexRoot}/_build ];
 then
-    rm -rf _build deps
-else
-    sudo rm -rf _build deps
-fi
-mix deps.get
-result=$?
-if [ $result -ne 0 ]; then
-    echo "ERROR: \`mix deps.get\` for Rclex failed: $result"
-    exit $result
-fi
-mix compile
-if [ $result -ne 0 ]; then
-    echo "ERROR: \`mix compile\` for Rclex failed: $result"
-    exit $result
+    echo "ERROR: ${rclexRoot} has not been built"
+    echo "ERROR: please do ./run-rebuild.sh before this"
+    exit 1
 fi
 
 
