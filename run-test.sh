@@ -50,14 +50,16 @@ passedTestCount=0
 for testScript in ${testScripts[@]};
 do
     cd $testRoot
-    if test $testScript = '*.sh'; then
+    if [ $testScript = '*.sh' ];
+    then
         continue
     fi
     testCount=$(($testCount + 1))
     echo "INFO: running test scrpit: $testScript"
     ./$testScript $rclexRoot
     result=$?
-    if test $result -eq 0; then
+    if [ $result -eq 0 ];
+    then
         echo -e "INFO: $testScript passed!\n"
         passedTestCount=$(($passedTestCount + 1))
     else
@@ -68,7 +70,8 @@ done
 
 echo "INFO: Complete all tests"
 echo "INFO: number of passed tests: $passedTestCount / $testCount"
-if test $testCount -ne $passedTestCount; then
+if [ $testCount -ne $passedTestCount ];
+then
     echo -e "ERROR: Failed tests: \n$failedTestNames"
     exit $testCount
 else

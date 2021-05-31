@@ -38,7 +38,9 @@ then
     fi
 
     colcon build
-    if [ $? -ne 0 ]; then
+    result=$?
+    if [ $result -ne 0 ];
+    then
         echo "ERROR: \`colcon build\` for Rclcpp failed: $result"
         exit $result
     fi
@@ -58,14 +60,16 @@ then
     fi
     
     mix deps.get
-    if [ $? -ne 0 ];
+    result=$?
+    if [ $result -ne 0 ];
     then
         echo "ERROR: \`mix deps.get\` for Rclex failed: $result"
         exit $result
     fi
     
     mix compile
-    if [ $? -ne 0 ];
+    result=$?
+    if [ $result -ne 0 ];
     then
         echo "ERROR: \`mix compile\` for Rclex failed: $result"
         exit $result

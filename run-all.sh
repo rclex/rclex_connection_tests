@@ -1,4 +1,11 @@
 #!/bin/bash
 
 bash run-rebuild.sh
-bash run-test.sh
+result=$?
+if [ $result -eq 0 ];
+then
+    bash run-test.sh
+else
+    echo "ERROR: run-rebuild.sh failed."
+    exit $result
+fi
