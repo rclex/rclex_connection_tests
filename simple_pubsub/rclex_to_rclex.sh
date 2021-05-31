@@ -10,11 +10,11 @@ wait
 
 exPub=`cat ex_pub.txt`
 echo "TESTINFO: published message  : $exPub"
-rm ex_pub.txt
+rm -f ex_pub.txt
 
 exSub=`cat ex_sub.txt`
 echo "TESTINFO: subscribed message : $exSub"
-rm ex_sub.txt
+rm -f ex_sub.txt
 
 test $exPub = $exSub
 result=$?
