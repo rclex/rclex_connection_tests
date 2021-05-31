@@ -1,39 +1,45 @@
 #!/bin/bash
 
+# define testScripts (need to edit when test case was added)
 testScripts=()
 testScripts+=(simple_pubsub/rclcpp_to_rclex.sh)
 testScripts+=(simple_pubsub/rclex_to_rclcpp.sh)
 testScripts+=(simple_pubsub/rclex_to_rclex.sh)
 
+if [ $# -ne 0 ];
+then
+    testScripts=()
+    for arg in ${@};
+    do
+        echo "INFO: addint ${arg} as test script"
+        if [ -e ${arg} ];
+        then
+            testScripts+=(${arg})
+        else
+            echo "ERROR: test script ${arg} does not exists"
+            exit 1
+        fi
+    done
+fi
+
+
 testRoot=`pwd`
 rclcppRoot=${testRoot}/rclcpp_node
 rclexRoot=${testRoot}/rclex_node
 
-# Rebuild Rclcpp node
-cd $rclcppRoot
-sudo rm -rf build install log
-colcon build
-result=$?
-if [ $result -ne 0 ]; then
-    echo "ERROR: \`colcon build\` for Rclcpp failed: $result"
-    exit $result
+if [ ! -d ${rclcppRoot}/build ];
+then
+    echo "ERROR: ${rclcppRoot} has not been built"
+    echo "ERROR: please do ./run-rebuild.sh before this"
+    exit 1
 else
-    source install/setup.bash
+    source ${rclcppRoot}/install/setup.bash
 fi
-
-# Rebuild Rclex node
-cd $rclexRoot
-sudo rm -rf _build deps
-mix deps.get
-result=$?
-if [ $result -ne 0 ]; then
-    echo "ERROR: \`mix deps.get\` for Rclex failed: $result"
-    exit $result
-fi
-mix compile
-if [ $result -ne 0 ]; then
-    echo "ERROR: \`mix compile\` for Rclex failed: $result"
-    exit $result
+if [ ! -d ${rclexRoot}/_build ];
+then
+    echo "ERROR: ${rclexRoot} has not been built"
+    echo "ERROR: please do ./run-rebuild.sh before this"
+    exit 1
 fi
 
 

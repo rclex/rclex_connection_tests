@@ -2,7 +2,7 @@
 
 ROS2クライアントライブラリ[Rclex](https://github.com/rclex/rclex)のテストディレクトリです。  
 
-Rclex自体の開発途中のテストやGitHub ActionsによるCIで使われることを想定しているため、rclexのリポジトリがローカルにあり、本リポジトリと並列にディレクトリが配置されている必要があります。
+Rclex自体の開発途中のテストやGitHub ActionsによるCIで使われることを想定しているため、Rclexのリポジトリがローカルにあり、本リポジトリと並列にディレクトリが配置されている必要があります。
 以下のように、2つのリポジトリのディレクトリを配置してください。
 
 ```
@@ -17,21 +17,23 @@ rclex  rclex_connection_tests
 
 ## ネイティブ環境での使い方 
 
-ROS 2およびElixir/Erlangの導入済みの環境では、`entrypoint.sh`を実行してください。
+ROS 2およびElixir/Erlangの導入済みの環境では、`run-all.sh`を実行してください。
 
 ```
 $ cd /path/to/yours/rclex_connection_tests
-$ ./entrypoint.sh
+$ ./run-all.sh
 ```
 
-## dockerを使用する場合
+`./run-rebuild.sh`は通信テスト用ノードのクリーンビルドのみを実行します。`rclcpp` または `rclex` のオプションでそれぞれ個別のビルドを指定することもできます。
 
-[Docker Hub](https://hub.docker.com/r/rclex/rclex_docker)で公開しているDocker imageを使用して、次のように実行することもできます。
+`./run-test.sh`は通信テストのみを実行します。任意個数の引数で対象とするテストスクリプトを指定することもできます。
+
+## Dockerを使用する場合
+
+Dockerが使用できる環境では、[Docker Hub](https://hub.docker.com/r/rclex/rclex_docker)で公開しているimageを使用して、次のように実行することもできます。
 
 ```
 $ cd /path/to/yours/rclex_connection_tests
-$ sudo docker-compose pull
-$ sudo docker-compose up -d
 $ ./test_in_docker.sh
 ```
 

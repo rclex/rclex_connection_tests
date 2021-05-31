@@ -8,13 +8,15 @@ sleep 1
 ros2 run cpp_pubsub talker &
 wait
 
+sleep 1
+
 cppPub=`cat cpp_pub.txt`
 echo "TESTINFO: published message  : $cppPub"
-rm cpp_pub.txt
+rm -f cpp_pub.txt
 
 exSub=`cat ex_sub.txt`
 echo "TESTINFO: subscribed message : $exSub"
-rm ex_sub.txt
+rm -f ex_sub.txt
 
 test $cppPub = $exSub
 result=$?

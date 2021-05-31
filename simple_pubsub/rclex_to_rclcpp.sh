@@ -8,13 +8,15 @@ sleep 1
 mix run priv/pub_test.exs &
 wait
 
+sleep 1
+
 exPub=`cat ex_pub.txt`
 echo "TESTINFO: published message  : $exPub"
-rm ex_pub.txt
+rm -f ex_pub.txt
 
 cppSub=`cat cpp_sub.txt`
 echo "TESTINFO: subscribed message : $cppSub"
-rm cpp_sub.txt
+rm -f cpp_sub.txt
 
 test $cppSub = $exPub
 result=$?
