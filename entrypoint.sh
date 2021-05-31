@@ -11,7 +11,12 @@ rclexRoot=${testRoot}/rclex_node
 
 # Rebuild Rclcpp node
 cd $rclcppRoot
-sudo rm -rf build install log
+if [ "$(uname)" == 'Darwin' ];
+then
+    rm -rf build install log
+else
+    sudo rm -rf build install log
+fi
 colcon build
 result=$?
 if [ $result -ne 0 ]; then
@@ -23,7 +28,12 @@ fi
 
 # Rebuild Rclex node
 cd $rclexRoot
-sudo rm -rf _build deps
+if [ "$(uname)" == 'Darwin' ];
+then
+    rm -rf _build deps
+else
+    sudo rm -rf _build deps
+fi
 mix deps.get
 result=$?
 if [ $result -ne 0 ]; then

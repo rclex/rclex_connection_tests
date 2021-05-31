@@ -26,12 +26,10 @@ $ ./entrypoint.sh
 
 ## dockerを使用する場合
 
-[Docker Hub](https://hub.docker.com/r/rclex/rclex_docker)で公開しているDocker imageを使用して、次のように実行することもできます。
+Dockerが使用できる環境では、[Docker Hub](https://hub.docker.com/r/rclex/rclex_docker)で公開しているimageを使用して、次のように実行することもできます。
 
 ```
 $ cd /path/to/yours/rclex_connection_tests
-$ sudo docker-compose pull
-$ sudo docker-compose up -d
 $ ./test_in_docker.sh
 ```
 
