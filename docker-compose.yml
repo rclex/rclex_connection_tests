@@ -3,7 +3,7 @@ services:
 
     rclex_docker:
         build: .
-        image: rclex/rclex_docker:latest
+        image: rclex/rclex_docker:${TAG}
         volumes:
             - ../rclex:/root/rclex
             - .:/root/rclex_connection_tests/
