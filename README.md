@@ -28,7 +28,7 @@ $ ./run-all.sh
 
 `./run-rebuild.sh` only performs clean build of nodes for the communication test. You can also specify a separate build for each with the `rclcpp` or `rclex` options.
 
-`./run-test.sh` only runs the communication test. You can also specify the target test script with any number of arguments.
+`./run-test.sh` only runs the communication test. You can also specify the target test scripts with any number of arguments.
 
 ## when using Docker
 
@@ -38,6 +38,8 @@ In an environment where Docker can be used, the test can also be operated with t
 $ cd /path/to/yours/rclex_connection_tests
 $ ./test_in_docker.sh
 ```
+
+You can also specify the target tags of Docker image with any number of arguments (e.g., `latest`, `dashing-ex1.9.1-otp22.0.7`).
 
 # Details
 

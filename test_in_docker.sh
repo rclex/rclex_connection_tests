@@ -2,17 +2,45 @@
 
 if [ "$(uname)" == 'Darwin' ];
 then
-  dockercmd="docker compose"
+  dockercmd="docker"
+  dockercmp="docker compose"
 else
-  dockercmd="sudo docker-compose"
+  dockercmd="sudo docker"
+  dockercmp="sudo docker-compose"
 fi
 
-${dockercmd} pull
-${dockercmd} up -d
+if [ $# -ne 0 ];
+then
+  Tags=()
+  for tag in ${@};
+  do
+    ${dockercmd} pull rclex/rclex_docker:${tag}
+    result=$?
+    if [ $result -eq 0 ];
+    then
+      echo "INFO: adding ${tag} as target tags os Docker image"
+      Tags+=(${tag})
+    else
+      echo "ERROR: Docker tag ${tag} does not exist in rclex/rclex_docker"
+      exit $result
+    fi
+  done
+else
+  ${dockercmd} pull rclex/rclex_docker:latest
+  Tags=(latest)
+fi
 
-${dockercmd} exec rclex_docker \
-  bash -c 'cd /root/rclex_connection_tests &&
-  source /opt/ros/${ROS_DISTRO}/setup.bash &&
-  ./run-all.sh '
+for tag in ${Tags[@]};
+do
+  echo "INFO: run-test start on rclex/rclex_docker:${tag}"
+  export TAG=${tag}
+  ${dockercmp} up -d
 
-${dockercmd} down
+  ${dockercmp} exec rclex_docker \
+    bash -c 'cd /root/rclex_connection_tests &&
+    source /opt/ros/${ROS_DISTRO}/setup.bash &&
+    ./run-all.sh '
+
+  ${dockercmp} down
+
+done
