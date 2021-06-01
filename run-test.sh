@@ -11,7 +11,7 @@ then
     testScripts=()
     for arg in ${@};
     do
-        echo "INFO: addint ${arg} as test script"
+        echo "INFO: adding ${arg} as test script"
         if [ -e ${arg} ];
         then
             testScripts+=(${arg})
