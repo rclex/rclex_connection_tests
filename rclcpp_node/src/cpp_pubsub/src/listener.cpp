@@ -22,7 +22,7 @@ private:
   {
     std::ofstream ofs("cpp_sub.txt");
     ofs << msg->data.c_str() << std::endl;
-    std::cout << msg->data.c_str() << std::endl;
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "subsribed msg: %s", msg->data.c_str());
     rclcpp::shutdown();
   }
   rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;

@@ -30,7 +30,7 @@ defmodule Test.App.SimplePubSub do
     n = length(publisher_list)
     msg_list = Rclex.initialize_msgs(n, :string)
     {:ok, data} = File.read("ex_pub.txt")
-    IO.puts("publish message:#{data}")
+    IO.puts("[rclex] publishing message: #{data}")
     # Set data.
     Enum.map(0..(n - 1), fn index ->
       Rclex.setdata(Enum.at(msg_list, index), data, :string)
@@ -59,7 +59,7 @@ defmodule Test.App.SimplePubSub do
   def sub_callback(msg) do
     # IO.puts("sub time:#{:os.system_time(:microsecond)}")
     received_msg = Rclex.readdata_string(msg)
-    IO.puts("received msg:#{received_msg}")
+    IO.puts("[rclex] received msg: #{received_msg}")
     File.write("ex_sub.txt", received_msg)
   end
 end
