@@ -15,7 +15,7 @@ defmodule Test.App.SimplePubSub do
     # In timer_start/2,3, the number of times that the timer process is executed can be set.
     # If it is not set, the timer process loops forever.
 
-    Process.sleep(3000)
+    Process.sleep(10000)
     Rclex.Timer.terminate_timer(sv, child)
     Rclex.publisher_finish(publisher_list, node_list)
     Rclex.node_finish(node_list)
@@ -48,7 +48,7 @@ defmodule Test.App.SimplePubSub do
     subscriber_list = Rclex.create_subscribers(node_list, 'testtopic', :single)
     {sv, child} = Rclex.Subscriber.subscribe_start(subscriber_list, context, &sub_callback/1)
 
-    Process.sleep(8000)
+    Process.sleep(10000)
     Rclex.Subscriber.subscribe_stop(sv, child)
     Rclex.subscriber_finish(subscriber_list, node_list)
     Rclex.node_finish(node_list)
