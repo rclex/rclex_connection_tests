@@ -21,7 +21,7 @@ public:
     srand (time(NULL));    
     std::string random_string;
     for (int i = 0; i < len; ++i) {
-        random_string += alphanum[rand() % sizeof(alphanum) - 1];
+      random_string += alphanum[rand() % (sizeof(alphanum) - 1)];
     }
     return random_string;
   }
