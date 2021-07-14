@@ -21,7 +21,7 @@ public:
     srand (time(NULL));    
     std::string random_string;
     for (int i = 0; i < len; ++i) {
-        random_string += alphanum[rand() % sizeof(alphanum) - 1];
+      random_string += alphanum[rand() % (sizeof(alphanum) - 1)];
     }
     return random_string;
   }
@@ -36,16 +36,18 @@ int main(int argc, char *argv[]) {
 
   std_msgs::msg::String message;
   message.data = Test_String::get_random_string(10);
+  RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "publishing msg: %s", message.data.c_str());
 
   rclcpp::WallRate rate(1s);
-
-  for (int i = 0; i < 2; i++) {
+  while (true) {
     publisher->publish(message);
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "publishing msg: %s", message.data.c_str());
-    std::ofstream ofs("cpp_pub.txt");
-    ofs << message.data;
+    std::ofstream ofs("pub_msg.txt");
+    ofs << message.data << std::endl;
     rclcpp::spin_some(node);
     rate.sleep();
+    std::ifstream ifs("sub_msg.txt");
+    if (ifs.is_open())
+      break;
   }
   rclcpp::shutdown();
   return 0;

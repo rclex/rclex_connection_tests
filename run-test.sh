@@ -2,6 +2,7 @@
 
 # define testScripts (need to edit when test case was added)
 testScripts=()
+testScripts+=(simple_pubsub/rclcpp_to_rclcpp.sh)
 testScripts+=(simple_pubsub/rclcpp_to_rclex.sh)
 testScripts+=(simple_pubsub/rclex_to_rclcpp.sh)
 testScripts+=(simple_pubsub/rclex_to_rclex.sh)

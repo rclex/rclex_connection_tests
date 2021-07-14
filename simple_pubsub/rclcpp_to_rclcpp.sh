@@ -16,20 +16,20 @@ do
   sleep 0.1
 done
 
-mix run priv/pub_test.exs &
+ros2 run cpp_pubsub talker &
 PID2=$!
 
 wait $PID1 $PID2
 
-exPub=`cat pub_msg.txt | tr -d "\0"`
-echo "TESTINFO: published message  : $exPub"
+cppPub=`cat pub_msg.txt | tr -d "\0"`
+echo "TESTINFO: published message  : $cppPub"
 rm -f pub_msg.txt
 
 cppSub=`cat sub_msg.txt | tr -d "\0"`
 echo "TESTINFO: subscribed message : $cppSub"
 rm -f sub_msg.txt
 
-test $cppSub = $exPub
+test $cppPub = $cppSub
 result=$?
 echo "TESTINFO: result : $result"
 
