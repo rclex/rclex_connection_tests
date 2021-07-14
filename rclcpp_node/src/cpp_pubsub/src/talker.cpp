@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
     publisher->publish(message);
     RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "publishing msg: %s", message.data.c_str());
     std::ofstream ofs("cpp_pub.txt");
-    ofs << message.data;
+    ofs << message.data << std::endl;
     rclcpp::spin_some(node);
     rate.sleep();
   }
