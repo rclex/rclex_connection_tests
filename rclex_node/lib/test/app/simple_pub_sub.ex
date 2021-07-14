@@ -8,8 +8,8 @@ defmodule Test.App.SimplePubSub do
     IO.puts("[rclex] publishing message: #{data}")
     File.write("pub_msg.txt", data, [:sync])
 
-    context = Rclex.rclexinit
-    node_list = Rclex.create_nodes(context,'test_pub_node',num_node)
+    context = Rclex.rclexinit()
+    node_list = Rclex.create_nodes(context, 'test_pub_node', num_node)
     publisher_list = Rclex.create_publishers(node_list, 'testtopic', :single)
     {sv, child} = Rclex.Timer.timer_start(publisher_list, 1000, &pub_callback/1)
 
@@ -34,6 +34,7 @@ defmodule Test.App.SimplePubSub do
     msg_list = Rclex.initialize_msgs(n, :string)
     # Set data.
     {:ok, data} = File.read("pub_msg.txt")
+
     Enum.map(0..(n - 1), fn index ->
       Rclex.setdata(Enum.at(msg_list, index), data, :string)
     end)
@@ -45,8 +46,8 @@ defmodule Test.App.SimplePubSub do
 
   def sub_main(num_node) do
     # Create as many nodes as you specify in num_node
-    context = Rclex.rclexinit
-    node_list = Rclex.create_nodes(context,'test_sub_node',num_node)
+    context = Rclex.rclexinit()
+    node_list = Rclex.create_nodes(context, 'test_sub_node', num_node)
     subscriber_list = Rclex.create_subscribers(node_list, 'testtopic', :single)
     {sv, child} = Rclex.Subscriber.subscribe_start(subscriber_list, context, &sub_callback/1)
 
@@ -71,7 +72,7 @@ defmodule Test.App.SimplePubSub do
   end
 
   defp wait_until_subscription() do
-    if !File.exists? ("sub_msg.txt") do
+    if !File.exists?("sub_msg.txt") do
       Process.sleep(100)
       wait_until_subscription()
     end
