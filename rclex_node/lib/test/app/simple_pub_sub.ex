@@ -49,6 +49,7 @@ defmodule Test.App.SimplePubSub do
     {sv, child} = Rclex.Subscriber.subscribe_start(subscriber_list, context, &sub_callback/1)
 
     Process.sleep(3000)
+    File.write("sub_ready.txt", "", [:sync])
 
     wait_until_subscription()
 

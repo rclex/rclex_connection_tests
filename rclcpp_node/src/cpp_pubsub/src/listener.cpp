@@ -15,6 +15,8 @@ public:
   {
     subscription_ = this->create_subscription<std_msgs::msg::String>(
       "testtopic", 10, std::bind(&Listener::topic_callback, this, _1));
+    std::ofstream ofs("sub_ready.txt");
+    ofs << std::endl;
   }
 
 private:

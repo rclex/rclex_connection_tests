@@ -3,12 +3,23 @@
 cd $1
 
 mix run priv/sub_test.exs &
-sleep 1
+PID1=$!
+
+echo "TESTINFO: wait for creating subscriber"
+while :
+do
+  if [ -e sub_ready.txt ]; then
+    echo "TESTINFO: subscriber has created"
+    rm -f sub_ready.txt
+    break
+  fi
+  sleep 0.1
+done
 
 ros2 run cpp_pubsub talker &
-wait
+PID2=$!
 
-sleep 1
+wait $PID1 $PID2
 
 cppPub=`cat cpp_pub.txt | tr -d "\0"`
 echo "TESTINFO: published message  : $cppPub"
