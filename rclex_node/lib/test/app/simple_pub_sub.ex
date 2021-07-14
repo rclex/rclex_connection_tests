@@ -49,6 +49,9 @@ defmodule Test.App.SimplePubSub do
     {sv, child} = Rclex.Subscriber.subscribe_start(subscriber_list, context, &sub_callback/1)
 
     Process.sleep(3000)
+
+    wait_until_subscription()
+
     Rclex.Subscriber.subscribe_stop(sv, child)
     Rclex.subscriber_finish(subscriber_list, node_list)
     Rclex.node_finish(node_list)
@@ -61,5 +64,14 @@ defmodule Test.App.SimplePubSub do
     received_msg = Rclex.readdata_string(msg)
     IO.puts("[rclex] received msg: #{received_msg}")
     File.write("ex_sub.txt", received_msg, [:sync])
+  end
+
+  defp wait_until_subscription() do
+    if File.exists? ("ex_sub.txt") do
+      IO.puts("[rclex] subscription has completed")
+    else
+      Process.sleep(100)
+      wait_until_subscription()
+    end
   end
 end
