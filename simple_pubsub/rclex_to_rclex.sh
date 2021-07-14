@@ -21,13 +21,13 @@ PID2=$!
 
 wait $PID1 $PID2
 
-exPub=`cat ex_pub.txt | tr -d "\0"`
+exPub=`cat pub_msg.txt | tr -d "\0"`
 echo "TESTINFO: published message  : $exPub"
-rm -f ex_pub.txt
+rm -f pub_msg.txt
 
-exSub=`cat ex_sub.txt | tr -d "\0"`
+exSub=`cat sub_msg.txt | tr -d "\0"`
 echo "TESTINFO: subscribed message : $exSub"
-rm -f ex_sub.txt
+rm -f sub_msg.txt
 
 test $exPub = $exSub
 result=$?

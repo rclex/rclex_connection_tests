@@ -22,7 +22,7 @@ public:
 private:
   void topic_callback(const std_msgs::msg::String::SharedPtr msg) const
   {
-    std::ofstream ofs("cpp_sub.txt");
+    std::ofstream ofs("sub_msg.txt");
     ofs << msg->data.c_str() << std::endl;
     RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "subscribed msg: %s", msg->data.c_str());
     rclcpp::shutdown();

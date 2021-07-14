@@ -5,15 +5,18 @@ defmodule Test.App.SimplePubSub do
   def pub_main(num_node) do
     # Create data to be published
     data = Test.Helper.String.random_string(10)
-    File.write("ex_pub.txt", data, [:sync])
+    IO.puts("[rclex] publishing message: #{data}")
+    File.write("pub_msg.txt", data, [:sync])
 
     context = Rclex.rclexinit
     node_list = Rclex.create_nodes(context,'test_pub_node',num_node)
     publisher_list = Rclex.create_publishers(node_list, 'testtopic', :single)
-    {sv, child} = Rclex.Timer.timer_start(publisher_list, 1000, &pub_callback/1, 2)
+    {sv, child} = Rclex.Timer.timer_start(publisher_list, 1000, &pub_callback/1)
 
     # In timer_start/2,3, the number of times that the timer process is executed can be set.
     # If it is not set, the timer process loops forever.
+
+    wait_until_subscription()
 
     Process.sleep(3000)
     Rclex.Timer.terminate_timer(sv, child)
@@ -29,9 +32,8 @@ defmodule Test.App.SimplePubSub do
     # Create messages according to the number of publishers.
     n = length(publisher_list)
     msg_list = Rclex.initialize_msgs(n, :string)
-    {:ok, data} = File.read("ex_pub.txt")
-    IO.puts("[rclex] publishing message: #{data}")
     # Set data.
+    {:ok, data} = File.read("pub_msg.txt")
     Enum.map(0..(n - 1), fn index ->
       Rclex.setdata(Enum.at(msg_list, index), data, :string)
     end)
@@ -52,6 +54,7 @@ defmodule Test.App.SimplePubSub do
     File.write("sub_ready.txt", "", [:sync])
 
     wait_until_subscription()
+    IO.puts("[rclex] subscription has completed")
 
     Rclex.Subscriber.subscribe_stop(sv, child)
     Rclex.subscriber_finish(subscriber_list, node_list)
@@ -64,13 +67,11 @@ defmodule Test.App.SimplePubSub do
     # IO.puts("sub time:#{:os.system_time(:microsecond)}")
     received_msg = Rclex.readdata_string(msg)
     IO.puts("[rclex] received msg: #{received_msg}")
-    File.write("ex_sub.txt", received_msg, [:sync])
+    File.write("sub_msg.txt", received_msg, [:sync])
   end
 
   defp wait_until_subscription() do
-    if File.exists? ("ex_sub.txt") do
-      IO.puts("[rclex] subscription has completed")
-    else
+    if !File.exists? ("sub_msg.txt") do
       Process.sleep(100)
       wait_until_subscription()
     end
