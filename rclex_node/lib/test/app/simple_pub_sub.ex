@@ -47,7 +47,7 @@ defmodule Test.App.SimplePubSub do
   def sub_main(num_node) do
     # Create as many nodes as you specify in num_node
     context = Rclex.rclexinit()
-    {:ok,node_list} = Rclex.Executor.create_nodes(context, 'test_sub_node', num_node)
+    {:ok, node_list} = Rclex.Executor.create_nodes(context, 'test_sub_node', num_node)
     {:ok, subscriber_list} = Rclex.Node.create_subscribers(node_list, 'testtopic', :single)
     Rclex.Subscriber.start_subscribing(subscriber_list, context, &sub_callback/1)
 
