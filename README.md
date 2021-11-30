@@ -39,7 +39,21 @@ $ cd /path/to/yours/rclex_connection_tests
 $ ./test_in_docker.sh
 ```
 
-You can also specify the target tags of Docker image with any number of arguments (e.g., `latest`, `dashing-ex1.9.1-otp22.0.7`).
+You can also specify the target tags of Docker image with any number of arguments (e.g., `latest`, `dashing-ex1.9.1-otp22.0.7`). Please check available Docker tags in [this list](https://github.com/rclex/rclex_docker#available-versions-docker-tags).
+
+If you want to operate the test process step by step, the following instruction may be useful.
+
+```
+$ cd /path/to/yours/rclex_connection_tests
+$ export TAG=latest    # or another tag as the target
+$ docker compose up -d
+$ docker compose exec rclex_docker bash
+### Enter the container
+# cd ~/rclex_connection_tests
+# source /opt/ros/${ROS_DISTRO}/setup.bash
+# ./run-rebuild.bash
+# ./run-test.bash
+```
 
 # Details
 
