@@ -9,9 +9,9 @@ defmodule Test.App.SimplePubSub do
     File.write("pub_msg.txt", data, [:sync])
 
     context = Rclex.rclexinit()
-    {:ok, node_list} = Rclex.Executor.create_nodes(context, 'test_pub_node', num_node)
+    {:ok, node_list} = Rclex.ResourceServer.create_nodes(context, 'test_pub_node', num_node)
     {:ok, publisher_list} = Rclex.Node.create_publishers(node_list, 'testtopic', :single)
-    {:ok, pid} = Rclex.Executor.create_timer(&pub_callback/1, publisher_list, 1000)
+    {:ok, pid} = Rclex.ResourceServer.create_timer(&pub_callback/1, publisher_list, 1000, "test_timer")
 
     # In timer_start/2,3, the number of times that the timer process is executed can be set.
     # If it is not set, the timer process loops forever.
@@ -19,9 +19,9 @@ defmodule Test.App.SimplePubSub do
     wait_until_subscription()
 
     Process.sleep(3000)
-    Rclex.Executor.stop_timer(pid)
+    Rclex.ResourceServer.stop_timer(pid)
     Rclex.Node.finish_jobs(publisher_list)
-    Rclex.Executor.finish_nodes(node_list)
+    Rclex.ResourceServer.finish_nodes(node_list)
     Rclex.shutdown(context)
   end
 
@@ -47,7 +47,7 @@ defmodule Test.App.SimplePubSub do
   def sub_main(num_node) do
     # Create as many nodes as you specify in num_node
     context = Rclex.rclexinit()
-    {:ok, node_list} = Rclex.Executor.create_nodes(context, 'test_sub_node', num_node)
+    {:ok, node_list} = Rclex.ResourceServer.create_nodes(context, 'test_sub_node', num_node)
     {:ok, subscriber_list} = Rclex.Node.create_subscribers(node_list, 'testtopic', :single)
     Rclex.Subscriber.start_subscribing(subscriber_list, context, &sub_callback/1)
 
@@ -59,7 +59,7 @@ defmodule Test.App.SimplePubSub do
 
     Rclex.Subscriber.stop_subscribing(subscriber_list)
     Rclex.Node.finish_jobs(subscriber_list)
-    Rclex.Executor.finish_nodes(node_list)
+    Rclex.ResourceServer.finish_nodes(node_list)
     Rclex.shutdown(context)
   end
 
