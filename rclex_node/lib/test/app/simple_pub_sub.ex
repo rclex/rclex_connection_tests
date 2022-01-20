@@ -11,7 +11,9 @@ defmodule Test.App.SimplePubSub do
     context = Rclex.rclexinit()
     {:ok, node_list} = Rclex.ResourceServer.create_nodes(context, 'test_pub_node', num_node)
     {:ok, publisher_list} = Rclex.Node.create_publishers(node_list, 'testtopic', :single)
-    {:ok, pid} = Rclex.ResourceServer.create_timer(&pub_callback/1, publisher_list, 1000, "test_timer")
+
+    {:ok, pid} =
+      Rclex.ResourceServer.create_timer(&pub_callback/1, publisher_list, 1000, "test_timer")
 
     # In timer_start/2,3, the number of times that the timer process is executed can be set.
     # If it is not set, the timer process loops forever.
