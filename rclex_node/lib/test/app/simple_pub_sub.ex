@@ -10,7 +10,7 @@ defmodule Test.App.SimplePubSub do
 
     context = Rclex.rclexinit()
     {:ok, nodes} = Rclex.ResourceServer.create_nodes(context, 'test_pub_node', num_node)
-    {:ok, publishers} = Rclex.Node.create_publishers(nodes, 'testtopic', :single)
+    {:ok, publishers} = Rclex.Node.create_publishers(nodes, 'StdMsgs.Msg.String', 'testtopic', :single)
 
     {:ok, timer} =
       Rclex.ResourceServer.create_timer(&pub_callback/1, publishers, 1000, "test_timer")
@@ -33,24 +33,25 @@ defmodule Test.App.SimplePubSub do
   def pub_callback(publishers) do
     # Create messages according to the number of publishers.
     n = length(publishers)
-    messages = Rclex.initialize_msgs(n, :string)
+    msg_list = Rclex.Msg.initialize_msgs(n, 'StdMsgs.Msg.String')
     # Set data.
     {:ok, data} = File.read("pub_msg.txt")
+    message= %Rclex.StdMsgs.Msg.String{data: String.to_charlist(data)}
 
     Enum.map(0..(n - 1), fn index ->
-      Rclex.setdata(Enum.at(messages, index), data, :string)
+      Rclex.Msg.set(Enum.at(msg_list, index), message, 'StdMsgs.Msg.String')
     end)
 
     # Publish topics.
     # IO.puts("pub time:#{:os.system_time(:microsecond)}")
-    Rclex.Publisher.publish(publishers, messages)
+    Rclex.Publisher.publish(publishers, msg_list)
   end
 
   def sub_main(num_node) do
     # Create as many nodes as you specify in num_node
     context = Rclex.rclexinit()
     {:ok, nodes} = Rclex.ResourceServer.create_nodes(context, 'test_sub_node', num_node)
-    {:ok, subscribers} = Rclex.Node.create_subscribers(nodes, 'testtopic', :single)
+    {:ok, subscribers} = Rclex.Node.create_subscribers(nodes, 'StdMsgs.Msg.String', 'testtopic', :single)
     Rclex.Subscriber.start_subscribing(subscribers, context, &sub_callback/1)
 
     Process.sleep(3000)
@@ -68,9 +69,10 @@ defmodule Test.App.SimplePubSub do
   # Describe callback function.
   def sub_callback(msg) do
     # IO.puts("sub time:#{:os.system_time(:microsecond)}")
-    recv_msg = Rclex.readdata_string(msg)
-    IO.puts("[rclex] received msg: #{recv_msg}")
-    File.write("sub_msg.txt", recv_msg, [:sync])
+    recv_msg = Rclex.Msg.read(msg, 'StdMsgs.Msg.String')
+    msg_data = List.to_string(recv_msg.data)
+    IO.puts("[rclex] received msg: #{msg_data}")
+    File.write("sub_msg.txt", msg_data, [:sync])
   end
 
   defp wait_until_subscription() do
