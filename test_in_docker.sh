@@ -5,8 +5,8 @@ then
   dockercmd="docker"
   dockercmp="docker compose"
 else
-  dockercmd="sudo docker"
-  dockercmp="sudo docker-compose"
+  dockercmd="docker"
+  dockercmp="docker-compose"
 fi
 
 if [ $# -ne 0 ];
