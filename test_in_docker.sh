@@ -6,7 +6,12 @@ then
   dockercmp="docker compose"
 else
   dockercmd="docker"
-  dockercmp="docker-compose"
+  if docker compose >/dev/null 2>&1;
+  then
+    dockercmp="docker compose"
+  else
+    dockercmp="docker-compose"
+  fi
 fi
 
 if [ $# -ne 0 ];
