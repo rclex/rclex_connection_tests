@@ -30,13 +30,8 @@ if [ ${build_rclcpp} -eq 1 ];
 then
     echo "INFO: building rclcpp node in ${rclcppRoot}"
     cd $rclcppRoot
-    if [ "$(uname)" == 'Darwin' ];
-    then
-        rm -rf build install log
-    else
-        sudo rm -rf build install log
-    fi
-
+        
+    rm -rf build install log
     colcon build
     result=$?
     if [ $result -ne 0 ];
@@ -52,13 +47,8 @@ if [ ${build_rclex} -eq 1 ];
 then
     echo "INFO: building rclcpp node in ${rclexRoot}"
     cd $rclexRoot
-    if [ "$(uname)" == 'Darwin' ];
-    then
-        rm -rf _build deps
-    else
-        sudo rm -rf _build deps
-    fi
     
+    rm -rf _build deps
     mix deps.get
     result=$?
     if [ $result -ne 0 ];
