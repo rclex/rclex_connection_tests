@@ -2,7 +2,6 @@ version: '3'
 services:
 
     rclex_docker:
-        build: .
         image: rclex/rclex_docker:${TAG:-latest}
         volumes:
             - ../rclex:/root/rclex
