@@ -1,78 +1,47 @@
 defmodule Test.App.SimplePubSub do
-  @moduledoc """
-    The sample which makes any number of publishers.
-  """
-  def pub_main(num_node) do
+  alias Rclex.Pkgs.StdMsgs
+
+  def pub_main() do
+    node_name = "test_pub_node"
+    topic_name = "/testtopic"
+
+    Rclex.start_node(node_name)
+    Rclex.start_publisher(StdMsgs.Msg.String, topic_name, node_name)
+
     # Create data to be published
     data = Test.Helper.String.random_string(10)
     IO.puts("[rclex] publishing message: #{data}")
     File.write("pub_msg.txt", data, [:sync])
 
-    context = Rclex.rclexinit()
-    {:ok, nodes} = Rclex.ResourceServer.create_nodes(context, 'test_pub_node', num_node)
-    {:ok, publishers} = Rclex.Node.create_publishers(nodes, 'StdMsgs.Msg.String', 'testtopic', :single)
+    message = struct(StdMsgs.Msg.String, %{data: "#{data}"})
 
-    {:ok, timer} =
-      Rclex.ResourceServer.create_timer(&pub_callback/1, publishers, 1000, "test_timer")
-
-    # In timer_start/2,3, the number of times that the timer process is executed can be set.
-    # If it is not set, the timer process loops forever.
+    Rclex.publish(message, topic_name, node_name)
 
     wait_until_subscription()
 
-    Process.sleep(3000)
-    Rclex.ResourceServer.stop_timer(timer)
-    Rclex.Node.finish_jobs(publishers)
-    Rclex.ResourceServer.finish_nodes(nodes)
-    Rclex.shutdown(context)
+    Rclex.stop_node(node_name)
   end
 
-  @doc """
-    Timer event callback function defined by user.
-  """
-  def pub_callback(publishers) do
-    # Create messages according to the number of publishers.
-    n = length(publishers)
-    msg_list = Rclex.Msg.initialize_msgs(n, 'StdMsgs.Msg.String')
-    # Set data.
-    {:ok, data} = File.read("pub_msg.txt")
-    message= %Rclex.StdMsgs.Msg.String{data: String.to_charlist(data)}
+  def sub_main() do
+    node_name = "test_sub_node"
+    topic_name = "/testtopic"
 
-    Enum.map(0..(n - 1), fn index ->
-      Rclex.Msg.set(Enum.at(msg_list, index), message, 'StdMsgs.Msg.String')
-    end)
+    Rclex.start_node(node_name)
+    Rclex.start_subscription(&sub_callback/1, StdMsgs.Msg.String, topic_name, node_name)
 
-    # Publish topics.
-    # IO.puts("pub time:#{:os.system_time(:microsecond)}")
-    Rclex.Publisher.publish(publishers, msg_list)
-  end
-
-  def sub_main(num_node) do
-    # Create as many nodes as you specify in num_node
-    context = Rclex.rclexinit()
-    {:ok, nodes} = Rclex.ResourceServer.create_nodes(context, 'test_sub_node', num_node)
-    {:ok, subscribers} = Rclex.Node.create_subscribers(nodes, 'StdMsgs.Msg.String', 'testtopic', :single)
-    Rclex.Subscriber.start_subscribing(subscribers, context, &sub_callback/1)
-
-    Process.sleep(3000)
     File.write("sub_ready.txt", "", [:sync])
 
     wait_until_subscription()
     IO.puts("[rclex] subscription has completed")
 
-    Rclex.Subscriber.stop_subscribing(subscribers)
-    Rclex.Node.finish_jobs(subscribers)
-    Rclex.ResourceServer.finish_nodes(nodes)
-    Rclex.shutdown(context)
+    Rclex.stop_node(node_name)
   end
 
   # Describe callback function.
   def sub_callback(msg) do
-    # IO.puts("sub time:#{:os.system_time(:microsecond)}")
-    recv_msg = Rclex.Msg.read(msg, 'StdMsgs.Msg.String')
-    msg_data = List.to_string(recv_msg.data)
-    IO.puts("[rclex] received msg: #{msg_data}")
-    File.write("sub_msg.txt", msg_data, [:sync])
+    IO.puts("sub time:#{:os.system_time(:microsecond)}")
+    IO.puts("[rclex] received msg: #{msg.data}")
+    File.write("sub_msg.txt", msg.data, [:sync])
   end
 
   defp wait_until_subscription() do
