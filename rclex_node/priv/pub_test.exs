@@ -1,1 +1,1 @@
-Test.App.SimplePubSub.pub_main(1)
+Test.App.SimplePubSub.pub_main()

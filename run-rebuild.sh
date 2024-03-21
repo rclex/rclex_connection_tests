@@ -47,8 +47,8 @@ if [ ${build_rclex} -eq 1 ];
 then
     echo "INFO: building rclcpp node in ${rclexRoot}"
     cd $rclexRoot
-    
     rm -rf _build deps
+
     mix deps.get
     result=$?
     if [ $result -ne 0 ];
@@ -56,7 +56,15 @@ then
         echo "ERROR: \`mix deps.get\` for Rclex failed: $result"
         exit $result
     fi
-    
+
+    mix rclex.gen.msgs
+    result=$?
+    if [ $result -ne 0 ];
+    then
+        echo "ERROR: \`mix rclex.gen.msgs\` for Rclex failed: $result"
+        exit $result
+    fi
+ 
     mix compile
     result=$?
     if [ $result -ne 0 ];
