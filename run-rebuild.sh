@@ -45,7 +45,7 @@ fi
 # Rebuild Rclex node
 if [ ${build_rclex} -eq 1 ];
 then
-    echo "INFO: building rclcpp node in ${rclexRoot}"
+    echo "INFO: building rclex node in ${rclexRoot}"
     cd $rclexRoot
     rm -rf _build deps
 
