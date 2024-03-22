@@ -10,16 +10,25 @@ defmodule Test.App.SimplePubSub do
 
     # Create data to be published
     data = Test.Helper.String.random_string(10)
-    IO.puts("[rclex] publishing message: #{data}")
     File.write("pub_msg.txt", data, [:sync])
 
     message = struct(StdMsgs.Msg.String, %{data: "#{data}"})
 
+    IO.puts("[rclex] publishing msg: #{data}")
     Rclex.publish(message, topic_name, node_name)
 
-    wait_until_subscription()
+    publish_until_subscription(message, topic_name, node_name)
 
     Rclex.stop_node(node_name)
+  end
+
+  defp publish_until_subscription(message, topic_name, node_name) do
+    Rclex.publish(message, topic_name, node_name)
+
+    if !File.exists?("sub_msg.txt") do
+      Process.sleep(1000)
+      publish_until_subscription(message, topic_name, node_name)
+    end
   end
 
   def sub_main() do
@@ -39,8 +48,7 @@ defmodule Test.App.SimplePubSub do
 
   # Describe callback function.
   def sub_callback(msg) do
-    IO.puts("sub time:#{:os.system_time(:microsecond)}")
-    IO.puts("[rclex] received msg: #{msg.data}")
+    IO.puts("[rclex] subscribed msg: #{msg.data}")
     File.write("sub_msg.txt", msg.data, [:sync])
   end
 
