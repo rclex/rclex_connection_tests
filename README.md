@@ -39,7 +39,7 @@ $ cd /path/to/yours/rclex_connection_tests
 $ ./test_in_docker.sh
 ```
 
-You can also specify the target tags of Docker image with any number of arguments (e.g., `latest`, `foxy-ex1.12.3-otp24.1.5`). Please check available Docker tags in [this list](https://github.com/rclex/rclex_docker#available-versions-docker-tags).
+You can also specify the target tags of Docker image with any number of arguments (e.g., `latest`, `humble-ex1.18.4-otp27.3.4.3`). Please check available Docker tags in [this list](https://github.com/rclex/rclex_docker#available-versions-docker-tags).
 
 If you want to operate the test process step by step, the following instruction may be useful.
 
