@@ -51,9 +51,8 @@ $ docker compose up -d
 $ docker compose exec rclex_docker bash
 ### Enter the container
 # cd ~/rclex_connection_tests
-# source /opt/ros/${ROS_DISTRO}/setup.bash
-# ./run-rebuild.bash
-# ./run-test.bash
+# ./run-rebuild.sh
+# ./run-test.sh
 ```
 
 # Details
