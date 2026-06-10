@@ -17,6 +17,12 @@ endif()
 # Default to the C++ standard for each distro family.
 if(NOT CMAKE_CXX_STANDARD)
   if(ros_distro_lyrical)
+    if(CMAKE_VERSION VERSION_LESS 3.12)
+      message(
+        FATAL_ERROR
+          "ROS_DISTRO=${ROS_DISTRO} selects C++20, but CMake ${CMAKE_VERSION} is too old. "
+          "Please use CMake >= 3.12 or set CMAKE_CXX_STANDARD manually.")
+    endif()
     set(CMAKE_CXX_STANDARD 20)
   else()
     set(CMAKE_CXX_STANDARD 14)
@@ -34,7 +40,7 @@ find_package(std_msgs REQUIRED)
 
 add_executable(talker src/talker.cpp)
 add_executable(listener src/listener.cpp)
-if(ros_distro_lyrical OR NOT COMMAND ament_target_dependencies)
+if(ros_distro_lyrical)
   target_link_libraries(talker PUBLIC rclcpp::rclcpp ${std_msgs_TARGETS})
   target_link_libraries(listener PUBLIC rclcpp::rclcpp ${std_msgs_TARGETS})
 else()
